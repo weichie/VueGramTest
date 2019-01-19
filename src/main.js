@@ -10,6 +10,8 @@ import { routes } from './routes'
 
 Vue.config.productionTip = false
 
+import './assets/app.scss'
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -30,8 +32,14 @@ router.beforeEach((to, from, next) => {
 	}
 })
 
-new Vue({
-	router,
-	store,
-	render: h => h(App),
-}).$mount('#app')
+let app
+fb.auth.onAuthStateChanged(user => {
+	if (!app) {
+		app = new Vue({
+			el: '#app',
+			router,
+			store,
+			render: h => h(App)
+		})
+	}
+})
